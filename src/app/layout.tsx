@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${interSans.className}`}>{children}</body>
+      <body className={`${interSans.className} bg-white`}>{children}</body>
     </html>
   );
 }
