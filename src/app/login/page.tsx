@@ -1,11 +1,34 @@
 "use client";
 
+import { API_URL, BASE_URL } from "@/config";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
+import Swal from "sweetalert2";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const error = searchParams.get("error");
+
   const handleGoogleLogin = () => {
-    alert("Login dengan Google");
+    router.push(
+      `${API_URL}/auth/google?redirect_to=${BASE_URL}/api/auth/result`,
+    );
   };
+
+  useEffect(() => {
+    if (error === "true") {
+      Swal.fire({
+        title: "Login Gagal",
+        text: "Pastikan Anda sudah mengizinkan akses login dengan Google.",
+        icon: "error",
+        confirmButtonText: "OK",
+      }).finally(() => {
+        router.push(`${BASE_URL}/login`);
+      });
+    }
+  }, []);
 
   return (
     <div className="flex h-screen w-full items-center justify-center bg-[#f0ebeb]">
