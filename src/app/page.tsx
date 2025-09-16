@@ -5,20 +5,32 @@ import ChatList from "./components/ChatList";
 import ChatRoom from "./components/ChatRoom";
 import Sidebar from "./components/Sidebar";
 import { useAuth } from "@/context/AuthContext";
+import ContactList from "./components/ContactList";
 
 export default function Home() {
   const { user } = useAuth();
+
+  const [listType, setListType] = useState<"chat" | "contact">("chat");
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-gray-50">
-      <Sidebar picture={user?.picture} name={user?.name} />
+      <Sidebar
+        picture={user?.picture}
+        name={user?.name}
+        onChatMenuClick={() => setListType("chat")}
+        onContactMenuClick={() => setListType("contact")}
+      />
 
       <main className="flex h-screen flex-1">
         <div
           className={`h-full w-full border-r border-gray-200 md:w-1/3 lg:w-1/4 ${selectedRoom !== null ? "hidden md:flex" : "flex"} flex-col`}
         >
-          <ChatList onSelectRoom={(id) => setSelectedRoom(id)} />
+          {listType === "chat" ? (
+            <ChatList onSelectRoom={(id) => setSelectedRoom(id)} />
+          ) : (
+            <ContactList></ContactList>
+          )}
         </div>
 
         <div

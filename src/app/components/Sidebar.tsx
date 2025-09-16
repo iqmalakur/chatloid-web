@@ -1,6 +1,7 @@
 import { BASE_URL } from "@/config";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import {
   FaComments,
   FaUserFriends,
@@ -12,9 +13,16 @@ import Swal from "sweetalert2";
 interface SidebarProps {
   picture: string | undefined;
   name: string | undefined;
+  onChatMenuClick: () => void;
+  onContactMenuClick: () => void;
 }
 
-export default function Sidebar({ picture, name }: SidebarProps) {
+export default function Sidebar({
+  picture,
+  name,
+  onChatMenuClick,
+  onContactMenuClick,
+}: SidebarProps) {
   const router = useRouter();
 
   const handleLogout = () => {
@@ -44,11 +52,17 @@ export default function Sidebar({ picture, name }: SidebarProps) {
       </div>
 
       <nav className="flex w-full flex-col gap-4">
-        <button className="flex flex-col items-center rounded-md p-2 hover:bg-gray-100">
+        <button
+          className="flex flex-col items-center rounded-md p-2 hover:bg-gray-100"
+          onClick={onChatMenuClick}
+        >
           <FaComments size={20} />
           <span className="inline">Chat</span>
         </button>
-        <button className="flex flex-col items-center rounded-md p-2 hover:bg-gray-100">
+        <button
+          className="flex flex-col items-center rounded-md p-2 hover:bg-gray-100"
+          onClick={onContactMenuClick}
+        >
           <FaUserFriends size={20} />
           <span className="inline">Kontak</span>
         </button>
