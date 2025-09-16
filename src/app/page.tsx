@@ -1,27 +1,68 @@
-import { cookies } from "next/headers";
-import ChatLayout from "./components/ChatLayout";
-import axios from "axios";
-import { API_URL } from "@/config";
-import { redirect } from "next/navigation";
-import User from "@/entities/User";
+"use client";
 
-export default async function Home() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("auth_token");
+import { useState } from "react";
+import ChatList from "./components/ChatList";
+import ChatRoom from "./components/ChatRoom";
+import Sidebar from "./components/Sidebar";
+import { useAuth } from "@/context/AuthContext";
 
-  if (!token) {
-    return redirect("/login");
-  }
+export default function Home() {
+  const { user } = useAuth();
+  const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
 
-  try {
-    const response = await axios.get<User>(`${API_URL}/users/me`, {
-      headers: {
-        Authorization: `bearer ${token.value}`,
-      },
-    });
+  return (
+    <div className="flex h-screen w-full overflow-hidden bg-gray-50">
+      <Sidebar picture={user?.picture} name={user?.name} />
 
-    return <ChatLayout user={response.data} />;
-  } catch (e) {
-    return redirect("/login");
-  }
+      <main className="flex h-screen flex-1">
+        <div
+          className={`h-full w-full border-r border-gray-200 md:w-1/3 lg:w-1/4 ${selectedRoom !== null ? "hidden md:flex" : "flex"} flex-col`}
+        >
+          <ChatList onSelectRoom={(id) => setSelectedRoom(id)} />
+        </div>
+
+        <div
+          className={`h-full w-full md:w-2/3 lg:w-3/4 ${selectedRoom === null ? "hidden md:flex" : "flex"} flex-col`}
+        >
+          {selectedRoom ? (
+            <ChatRoom
+              friend={{
+                id: 1,
+                name: "Alice",
+                avatar: "https://i.pravatar.cc/150?img=1",
+                online: true,
+              }}
+              initialMessages={[
+                {
+                  id: 1,
+                  sender: "friend",
+                  content: "Halo, apa kabar?",
+                  timestamp: new Date(Date.now() - 86400000), // kemarin
+                },
+                {
+                  id: 2,
+                  sender: "me",
+                  content: "Baik, kamu?",
+                  timestamp: new Date(),
+                },
+              ]}
+            />
+          ) : (
+            <div className="flex flex-1 items-center justify-center text-gray-400">
+              Pilih chat untuk memulai
+            </div>
+          )}
+
+          {selectedRoom !== null && (
+            <button
+              className="border-t p-3 text-blue-500 md:hidden"
+              onClick={() => setSelectedRoom(null)}
+            >
+              ← Kembali
+            </button>
+          )}
+        </div>
+      </main>
+    </div>
+  );
 }
