@@ -1,11 +1,33 @@
+import { BASE_URL } from "@/config";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 import {
   FaComments,
   FaUserFriends,
   FaSignOutAlt,
   FaUserCircle,
 } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 export default function Sidebar() {
+  const router = useRouter();
+
+  const handleLogout = () => {
+    axios
+      .post(`${BASE_URL}/api/auth/logout`)
+      .then(() => {
+        router.push(`${BASE_URL}/login`);
+      })
+      .catch(() => {
+        Swal.fire({
+          title: "Logout Gagal",
+          text: "Terjadi kesalahan saat mencoba logout. Silakan coba lagi.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      });
+  };
+
   return (
     <aside className="flex w-fit flex-col items-center border-r bg-white px-1 py-4 shadow-sm">
       <div className="mb-6 flex flex-col items-center">
@@ -25,7 +47,10 @@ export default function Sidebar() {
 
       <div className="flex-1"></div>
 
-      <button className="flex flex-col items-center rounded-md p-2 text-red-600 hover:bg-gray-100">
+      <button
+        className="flex flex-col items-center rounded-md p-2 text-red-600 hover:bg-gray-100"
+        onClick={handleLogout}
+      >
         <FaSignOutAlt size={20} />
         <span className="block">Logout</span>
       </button>
