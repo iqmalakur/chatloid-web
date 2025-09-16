@@ -1,15 +1,15 @@
 import { BASE_URL } from "@/config";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import {
-  FaComments,
-  FaUserFriends,
-  FaSignOutAlt,
-  FaUserCircle,
-} from "react-icons/fa";
+import { FaComments, FaUserFriends, FaSignOutAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
 
-export default function Sidebar() {
+interface SidebarProps {
+  picture: string;
+  name: string;
+}
+
+export default function Sidebar({ picture, name }: SidebarProps) {
   const router = useRouter();
 
   const handleLogout = () => {
@@ -30,8 +30,9 @@ export default function Sidebar() {
 
   return (
     <aside className="flex w-fit flex-col items-center border-r bg-white px-1 py-4 shadow-sm">
-      <div className="mb-6 flex flex-col items-center">
-        <FaUserCircle size={32} className="text-gray-500" />
+      <div className="mb-6 flex flex-col items-center text-sm">
+        <img src={picture} alt={name} className="w-10 rounded-full" />
+        {/* <FaUserCircle size={32} className="text-gray-500" /> */}
       </div>
 
       <nav className="flex w-full flex-col gap-4">

@@ -15,7 +15,7 @@ export default function ChatLayout({ user }: ChatLayoutProps) {
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-gray-50">
-      <Sidebar />
+      <Sidebar picture={user.picture} name={user.name} />
 
       <main className="flex h-screen flex-1">
         <div
