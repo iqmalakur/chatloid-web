@@ -25,28 +25,7 @@ export default function Home() {
           className={`h-full w-full md:w-2/3 lg:w-3/4 ${selectedRoom === null ? "hidden md:flex" : "flex"} flex-col`}
         >
           {selectedRoom ? (
-            <ChatRoom
-              friend={{
-                id: 1,
-                name: "Alice",
-                avatar: "https://i.pravatar.cc/150?img=1",
-                online: true,
-              }}
-              initialMessages={[
-                {
-                  id: 1,
-                  sender: "friend",
-                  content: "Halo, apa kabar?",
-                  timestamp: new Date(Date.now() - 86400000), // kemarin
-                },
-                {
-                  id: 2,
-                  sender: "me",
-                  content: "Baik, kamu?",
-                  timestamp: new Date(),
-                },
-              ]}
-            />
+            <ChatRoom id={selectedRoom} />
           ) : (
             <div className="flex flex-1 items-center justify-center text-gray-400">
               Pilih chat untuk memulai

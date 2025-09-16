@@ -1,28 +1,52 @@
 "use client";
 
-import { useState } from "react";
+import { API_URL } from "@/config";
+import { useAuth } from "@/context/AuthContext";
+import { Chat, Message } from "@/entities/Chat";
+import { capitalize } from "@/helper/capitalize";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { FiSend } from "react-icons/fi";
 
-interface Message {
-  id: number;
-  sender: "me" | "friend";
-  content: string;
-  timestamp: Date;
+interface ChatRoomProps {
+  id: string;
 }
 
-interface ChatProps {
-  friend: {
-    id: number;
-    name: string;
-    avatar: string;
-    online: boolean;
-  };
-  initialMessages: Message[];
-}
+export default function ChatRoom({ id }: ChatRoomProps) {
+  const { token } = useAuth();
 
-export default function ChatRoom({ friend, initialMessages }: ChatProps) {
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [input, setInput] = useState("");
+  const [chat, setChat] = useState<Chat | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const result = await axios.get<Chat>(`${API_URL}/chats/${id}`, {
+          headers: {
+            Authorization: `bearer ${token}`,
+          },
+        });
+        setChat(() => {
+          const chat = result.data;
+
+          chat.chats = chat.chats.map((c) => {
+            return {
+              ...c,
+              createdAt: new Date(c.createdAt),
+            };
+          });
+
+          setMessages(chat.chats);
+          return chat;
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    fetch();
+  }, [id]);
 
   const formatTime = (date: Date) =>
     date.toLocaleTimeString("id-ID", {
@@ -47,18 +71,19 @@ export default function ChatRoom({ friend, initialMessages }: ChatProps) {
 
   const shouldShowSeparator = (messages: Message[], index: number) => {
     if (index === 0) return true;
-    const prevDate = messages[index - 1].timestamp;
-    const currDate = messages[index].timestamp;
+    const prevDate = messages[index - 1].createdAt;
+    const currDate = messages[index].createdAt;
     return prevDate.toDateString() !== currDate.toDateString();
   };
 
   const sendMessage = () => {
     if (!input.trim()) return;
     const newMessage: Message = {
-      id: Date.now(),
+      id: "lkdsjfksdf",
       sender: "me",
       content: input.trim(),
-      timestamp: new Date(),
+      createdAt: new Date(),
+      isEdited: false,
     };
     setMessages([...messages, newMessage]);
     setInput("");
@@ -68,14 +93,14 @@ export default function ChatRoom({ friend, initialMessages }: ChatProps) {
     <div className="flex h-full w-full flex-col">
       <div className="flex items-center gap-3 border-b border-gray-200 p-3">
         <img
-          src={friend.avatar}
-          alt={friend.name}
+          src={chat?.picture}
+          alt={chat?.displayName}
           className="h-10 w-10 rounded-full object-cover"
         />
         <div>
-          <h2 className="font-semibold">{friend.name}</h2>
+          <h2 className="font-semibold">{chat?.displayName}</h2>
           <p className="text-sm text-gray-500">
-            {friend.online ? "Online" : "Offline"}
+            {capitalize(chat?.status ?? "")}
           </p>
         </div>
       </div>
@@ -85,7 +110,7 @@ export default function ChatRoom({ friend, initialMessages }: ChatProps) {
           <div key={msg.id}>
             {shouldShowSeparator(messages, i) && (
               <div className="mb-2 text-center text-xs text-gray-500">
-                {formatDateSeparator(msg.timestamp)}
+                {formatDateSeparator(msg.createdAt)}
               </div>
             )}
             <div
@@ -102,7 +127,7 @@ export default function ChatRoom({ friend, initialMessages }: ChatProps) {
               >
                 <p>{msg.content}</p>
                 <span className="mt-1 block text-right text-xs text-gray-300">
-                  {formatTime(msg.timestamp)}
+                  {formatTime(msg.createdAt)}
                 </span>
               </div>
             </div>
