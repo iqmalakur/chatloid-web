@@ -1,6 +1,7 @@
 import { API_URL } from "@/config";
 import { useAuth } from "@/context/AuthContext";
 import { Room } from "@/entities/Room";
+import { formatChatListDate } from "@/helper/date";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
@@ -73,7 +74,7 @@ export default function ChatList({ onSelectRoom }: ChatListProps) {
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold">{room.displayName}</h3>
                 <span className="text-xs text-gray-400">
-                  {room.lastMessage?.createdAt.toDateString() ?? ""}
+                  {formatChatListDate(room.lastMessage?.createdAt)}
                 </span>
               </div>
               <p className="truncate text-sm text-gray-500">

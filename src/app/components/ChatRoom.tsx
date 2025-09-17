@@ -3,9 +3,11 @@
 import { API_URL } from "@/config";
 import { useAuth } from "@/context/AuthContext";
 import { Chat, Message } from "@/entities/Chat";
+import { NewMessage } from "@/entities/NewMessage";
 import { capitalize } from "@/helper/capitalize";
+import useSocket from "@/hooks/useSocket";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FiSend } from "react-icons/fi";
 
 interface ChatRoomProps {
@@ -13,11 +15,18 @@ interface ChatRoomProps {
 }
 
 export default function ChatRoom({ id }: ChatRoomProps) {
-  const { token } = useAuth();
+  const { user, token } = useAuth();
+  const socket = useSocket();
 
   const [input, setInput] = useState("");
   const [chat, setChat] = useState<Chat | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
+
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "instant" });
+  }, [messages]);
 
   useEffect(() => {
     const fetch = async () => {
@@ -47,6 +56,25 @@ export default function ChatRoom({ id }: ChatRoomProps) {
 
     fetch();
   }, [id]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("new_message", (message: NewMessage) => {
+      const newMessage: Message = {
+        id: message.id,
+        sender: message.senderId,
+        content: message.content,
+        createdAt: new Date(message.timestamp),
+        isEdited: message.isEdited,
+      };
+      setMessages([...messages, newMessage]);
+    });
+
+    return () => {
+      socket.off("new_message");
+    };
+  }, [socket, messages]);
 
   const formatTime = (date: Date) =>
     date.toLocaleTimeString("id-ID", {
@@ -78,14 +106,13 @@ export default function ChatRoom({ id }: ChatRoomProps) {
 
   const sendMessage = () => {
     if (!input.trim()) return;
-    const newMessage: Message = {
-      id: "lkdsjfksdf",
-      sender: "me",
-      content: input.trim(),
-      createdAt: new Date(),
-      isEdited: false,
-    };
-    setMessages([...messages, newMessage]);
+    if (!socket) return;
+
+    socket.emit("send_message", {
+      chatRoomId: id,
+      content: input,
+    });
+
     setInput("");
   };
 
@@ -115,12 +142,12 @@ export default function ChatRoom({ id }: ChatRoomProps) {
             )}
             <div
               className={`flex ${
-                msg.sender === "me" ? "justify-end" : "justify-start"
+                msg.sender === user?.id ? "justify-end" : "justify-start"
               }`}
             >
               <div
                 className={`max-w-xs rounded-2xl px-3 py-2 text-sm shadow ${
-                  msg.sender === "me"
+                  msg.sender === user?.id
                     ? "rounded-br-none bg-blue-500 text-white"
                     : "rounded-bl-none bg-white text-gray-800"
                 }`}
@@ -133,6 +160,7 @@ export default function ChatRoom({ id }: ChatRoomProps) {
             </div>
           </div>
         ))}
+        <div ref={bottomRef}></div>
       </div>
 
       <div className="flex items-center gap-2 border-t border-gray-200 p-3">

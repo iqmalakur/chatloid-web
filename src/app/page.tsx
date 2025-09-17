@@ -29,7 +29,7 @@ export default function Home() {
           {listType === "chat" ? (
             <ChatList onSelectRoom={(id) => setSelectedRoom(id)} />
           ) : (
-            <ContactList></ContactList>
+            <ContactList />
           )}
         </div>
 
