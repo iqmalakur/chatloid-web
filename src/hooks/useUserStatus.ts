@@ -10,7 +10,7 @@ export default function useUserStatus(chat: Chat | null) {
   useEffect(() => {
     if (!socket) return;
 
-    if (userStatus === "" && chat?.userContactId) {
+    if (chat?.userContactId) {
       socket.emit("get_user_status", { id: chat.userContactId });
     }
 
