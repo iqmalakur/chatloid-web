@@ -1,15 +1,15 @@
+import { Room } from "@/entities/Room";
 import { formatChatListDate } from "@/helper/date";
-import useChatList from "@/hooks/useChatList";
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 
 interface ChatListProps {
+  rooms: Room[];
   onSelectRoom: (roomId: string) => void;
 }
 
-export default function ChatList({ onSelectRoom }: ChatListProps) {
+export default function ChatList({ rooms, onSelectRoom }: ChatListProps) {
   const [search, setSearch] = useState("");
-  const { rooms } = useChatList();
 
   return (
     <section className="flex h-full w-full flex-col border-r border-gray-200">
