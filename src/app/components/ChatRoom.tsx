@@ -5,7 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import { Chat, Message } from "@/entities/Chat";
 import { NewMessage } from "@/entities/NewMessage";
 import { capitalize } from "@/helper/capitalize";
-import useSocket from "@/hooks/useSocket";
+import { useSocket } from "@/context/SocketContext";
 import useUserStatus from "@/hooks/useUserStatus";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
@@ -17,7 +17,7 @@ interface ChatRoomProps {
 
 export default function ChatRoom({ id }: ChatRoomProps) {
   const { user, token } = useAuth();
-  const socket = useSocket();
+  const { socket } = useSocket();
 
   const [input, setInput] = useState("");
   const [chat, setChat] = useState<Chat | null>(null);

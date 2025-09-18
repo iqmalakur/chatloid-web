@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import useSocket from "./useSocket";
+import { useSocket } from "@/context/SocketContext";
 import { UserStatus } from "@/entities/UserStatus";
 import { Chat } from "@/entities/Chat";
 
 export default function useUserStatus(chat: Chat | null) {
-  const socket = useSocket();
+  const { socket } = useSocket();
   const [userStatus, setUserStatus] = useState("");
 
   useEffect(() => {
