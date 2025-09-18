@@ -8,6 +8,7 @@ export class Message {
 
 export class Chat {
   public id!: string;
+  public userContactId!: string;
   public displayName!: string;
   public picture!: string;
   public status!: string;

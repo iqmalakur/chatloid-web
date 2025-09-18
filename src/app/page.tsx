@@ -6,12 +6,15 @@ import ChatRoom from "./components/ChatRoom";
 import Sidebar from "./components/Sidebar";
 import { useAuth } from "@/context/AuthContext";
 import ContactList from "./components/ContactList";
+import useSocket from "@/hooks/useSocket";
 
 export default function Home() {
   const { user } = useAuth();
 
   const [listType, setListType] = useState<"chat" | "contact">("chat");
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
+
+  useSocket();
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-gray-50">

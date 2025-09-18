@@ -4,6 +4,7 @@ import { API_URL } from "@/config";
 import { useAuth } from "@/context/AuthContext";
 import { Chat, Message } from "@/entities/Chat";
 import { NewMessage } from "@/entities/NewMessage";
+import { UserStatus } from "@/entities/UserStatus";
 import { capitalize } from "@/helper/capitalize";
 import useSocket from "@/hooks/useSocket";
 import axios from "axios";
@@ -23,6 +24,26 @@ export default function ChatRoom({ id }: ChatRoomProps) {
   const [messages, setMessages] = useState<Message[]>([]);
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
+
+  const [userStatus, setUserStatus] = useState("");
+
+  useEffect(() => {
+    if (!socket) return;
+
+    if (userStatus === "" && chat?.userContactId) {
+      socket.emit("get_user_status", { id: chat.userContactId });
+    }
+
+    socket.on("user_status", ({ userId, status }: UserStatus) => {
+      if (chat?.userContactId === userId) {
+        setUserStatus(status);
+      }
+    });
+
+    return () => {
+      socket.off("user_status");
+    };
+  }, [socket, chat, userStatus]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "instant" });
@@ -128,9 +149,7 @@ export default function ChatRoom({ id }: ChatRoomProps) {
         />
         <div>
           <h2 className="font-semibold">{chat?.displayName}</h2>
-          <p className="text-sm text-gray-500">
-            {capitalize(chat?.status ?? "")}
-          </p>
+          <p className="text-sm text-gray-500">{capitalize(userStatus)}</p>
         </div>
       </div>
 
