@@ -1,4 +1,4 @@
-export function formatChatListDate(date?: Date): string {
+export const formatChatListDate = (date?: Date): string => {
   if (!date) return "";
 
   const now = new Date();
@@ -23,4 +23,25 @@ export function formatChatListDate(date?: Date): string {
       year: "numeric",
     });
   }
-}
+};
+
+export const formatTime = (date: Date) =>
+  date.toLocaleTimeString("id-ID", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+
+export const formatDateSeparator = (date: Date) => {
+  const today = new Date();
+  const yesterday = new Date();
+  yesterday.setDate(today.getDate() - 1);
+
+  if (date.toDateString() === today.toDateString()) {
+    return "Hari ini";
+  } else if (date.toDateString() === yesterday.toDateString()) {
+    return "Kemarin";
+  } else {
+    return date.toLocaleDateString("id-ID");
+  }
+};

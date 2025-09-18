@@ -10,6 +10,7 @@ import useUserStatus from "@/hooks/useUserStatus";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { FiSend } from "react-icons/fi";
+import { formatDateSeparator, formatTime } from "@/helper/date";
 
 interface ChatRoomProps {
   id: string;
@@ -79,27 +80,6 @@ export default function ChatRoom({ id }: ChatRoomProps) {
       socket.off("new_message");
     };
   }, [socket, messages]);
-
-  const formatTime = (date: Date) =>
-    date.toLocaleTimeString("id-ID", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-
-  const formatDateSeparator = (date: Date) => {
-    const today = new Date();
-    const yesterday = new Date();
-    yesterday.setDate(today.getDate() - 1);
-
-    if (date.toDateString() === today.toDateString()) {
-      return "Hari ini";
-    } else if (date.toDateString() === yesterday.toDateString()) {
-      return "Kemarin";
-    } else {
-      return date.toLocaleDateString("id-ID");
-    }
-  };
 
   const shouldShowSeparator = (messages: Message[], index: number) => {
     if (index === 0) return true;
