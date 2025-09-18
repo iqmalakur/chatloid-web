@@ -61,14 +61,16 @@ export default function ChatRoom({ id }: ChatRoomProps) {
     if (!socket) return;
 
     socket.on("new_message", (message: NewMessage) => {
-      const newMessage: Message = {
-        id: message.id,
-        sender: message.senderId,
-        content: message.content,
-        createdAt: new Date(message.timestamp),
-        isEdited: message.isEdited,
-      };
-      setMessages([...messages, newMessage]);
+      if (message.chatRoomId === id) {
+        const newMessage: Message = {
+          id: message.id,
+          sender: message.senderId,
+          content: message.content,
+          createdAt: new Date(message.timestamp),
+          isEdited: message.isEdited,
+        };
+        setMessages([...messages, newMessage]);
+      }
     });
 
     return () => {
