@@ -8,14 +8,16 @@ interface MainContentProps {
   listType: "chat" | "contact";
   selectedRoom: string | null;
   onSelectedRoom: (id: string | null) => void;
+  onRoomCreated: (id: string) => void;
 }
 
 export default function MainContent({
   listType,
   selectedRoom,
   onSelectedRoom,
+  onRoomCreated,
 }: MainContentProps) {
-  const { rooms, onMessageUpdate } = useChatList();
+  const { rooms, onMessageUpdate, onUpdateRoom } = useChatList();
   const { chat, messages } = useChatRoom(selectedRoom, onMessageUpdate);
 
   return (
@@ -26,7 +28,12 @@ export default function MainContent({
         {listType === "chat" ? (
           <ChatList rooms={rooms} onSelectRoom={onSelectedRoom} />
         ) : (
-          <ContactList />
+          <ContactList
+            onCreateRoom={(room) => {
+              onUpdateRoom(room);
+              onRoomCreated(room.id);
+            }}
+          />
         )}
       </div>
 

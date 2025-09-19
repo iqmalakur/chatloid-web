@@ -3,11 +3,26 @@ import { useAuth } from "@/context/AuthContext";
 import { NewMessage } from "@/entities/NewMessage";
 import { Room } from "@/entities/Room";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function useChatList() {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const [rooms, setRooms] = useState<Room[]>([]);
+  const [isUpdate, setIsUpdate] = useState(true);
+
+  const userRef = useRef(user);
+  useEffect(() => {
+    userRef.current = user;
+  }, [user]);
+
+  const onUpdateRoom = (room: Room) => {
+    setRooms((rooms) => {
+      if (!rooms.find((r) => r.id === room.id)) {
+        return [...rooms, room];
+      }
+      return rooms;
+    });
+  };
 
   const onMessageUpdate = (message: NewMessage) => {
     setRooms((rooms) => {
@@ -22,6 +37,13 @@ export default function useChatList() {
             createdAt: new Date(message.timestamp),
           },
         });
+      } else {
+        if (
+          userRef.current != null &&
+          message.receiverId === userRef.current.id
+        ) {
+          setIsUpdate(true);
+        }
       }
 
       return Array.from(roomsMap.values()).sort(
@@ -33,33 +55,37 @@ export default function useChatList() {
   };
 
   useEffect(() => {
-    const fetch = async () => {
-      try {
-        const result = await axios.get<Room[]>(`${API_URL}/chats`, {
-          headers: {
-            Authorization: `bearer ${token}`,
-          },
-        });
-        setRooms(
-          result.data.map((room) => {
-            if (room.lastMessage)
-              return {
-                ...room,
-                lastMessage: {
-                  content: room.lastMessage.content,
-                  createdAt: new Date(room.lastMessage.createdAt),
-                },
-              };
-            return room;
-          }),
-        );
-      } catch (e) {
-        console.error(e);
-      }
-    };
+    if (isUpdate) {
+      const fetch = async () => {
+        try {
+          const result = await axios.get<Room[]>(`${API_URL}/chats`, {
+            headers: {
+              Authorization: `bearer ${token}`,
+            },
+          });
+          setRooms(
+            result.data.map((room) => {
+              if (room.lastMessage)
+                return {
+                  ...room,
+                  lastMessage: {
+                    content: room.lastMessage.content,
+                    createdAt: new Date(room.lastMessage.createdAt),
+                  },
+                };
+              return room;
+            }),
+          );
+        } catch (e) {
+          console.error(e);
+        } finally {
+          setIsUpdate(false);
+        }
+      };
 
-    fetch();
-  }, []);
+      fetch();
+    }
+  }, [isUpdate]);
 
-  return { rooms, onMessageUpdate };
+  return { rooms, onMessageUpdate, onUpdateRoom };
 }

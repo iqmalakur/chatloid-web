@@ -32,6 +32,10 @@ export default function Home() {
           listType={listType}
           selectedRoom={selectedRoom}
           onSelectedRoom={(id) => setSelectedRoom(id)}
+          onRoomCreated={(id) => {
+            setSelectedRoom(id);
+            setListType("chat");
+          }}
         />
       </SocketProvider>
     </div>
