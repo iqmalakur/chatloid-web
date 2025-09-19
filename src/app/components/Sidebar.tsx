@@ -60,7 +60,7 @@ export default function Sidebar({
 
       <nav className="flex w-full flex-col gap-4">
         <button
-          className={`flex flex-col items-center rounded-md p-2 hover:bg-gray-100 ${
+          className={`flex cursor-pointer flex-col items-center rounded-md p-2 hover:bg-gray-100 ${
             listType === "chat" ? "font-semibold" : ""
           }`}
           onClick={onChatMenuClick}
@@ -74,7 +74,7 @@ export default function Sidebar({
           <span className="inline">Chat</span>
         </button>
         <button
-          className={`flex flex-col items-center rounded-md p-2 hover:bg-gray-100 ${
+          className={`flex cursor-pointer flex-col items-center rounded-md p-2 hover:bg-gray-100 ${
             listType === "contact" ? "font-semibold" : ""
           }`}
           onClick={onContactMenuClick}
@@ -92,7 +92,7 @@ export default function Sidebar({
       <div className="flex-1"></div>
 
       <button
-        className="flex flex-col items-center rounded-md p-2 text-red-600 hover:bg-gray-100"
+        className="flex cursor-pointer flex-col items-center rounded-md p-2 text-red-600 hover:bg-gray-100"
         onClick={handleLogout}
       >
         <FaSignOutAlt size={20} />

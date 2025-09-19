@@ -112,7 +112,7 @@ export default function ChatRoom({ chat, messages, onBack }: ChatRoomProps) {
         />
         <button
           onClick={sendMessage}
-          className="rounded-full bg-blue-500 p-2 text-white hover:bg-blue-600"
+          className="cursor-pointer rounded-full bg-blue-500 p-2 text-white hover:bg-blue-600"
         >
           <FiSend size={18} />
         </button>
