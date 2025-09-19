@@ -1,12 +1,13 @@
 import { BASE_URL } from "@/config";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { FaSignOutAlt, FaUserCircle } from "react-icons/fa";
 import {
-  FaComments,
-  FaUserFriends,
-  FaSignOutAlt,
-  FaUserCircle,
-} from "react-icons/fa";
+  HiChatAlt2,
+  HiOutlineChatAlt2,
+  HiOutlineUserGroup,
+  HiUserGroup,
+} from "react-icons/hi";
 import Swal from "sweetalert2";
 
 interface SidebarProps {
@@ -43,10 +44,10 @@ export default function Sidebar({
   };
 
   return (
-    <aside className="flex w-fit flex-col items-center border-r bg-white px-1 py-4 shadow-sm">
+    <aside className="flex w-20 flex-col items-center border-r bg-white px-1 py-4 shadow-sm">
       <div className="mb-6 flex flex-col items-center text-sm">
         {picture && name ? (
-          <img src={picture} alt={name} className="w-10 rounded-full" />
+          <img src={picture} alt={name} className="w-12 rounded-full" />
         ) : (
           <FaUserCircle size={32} className="text-gray-500" />
         )}
@@ -59,7 +60,12 @@ export default function Sidebar({
           }`}
           onClick={onChatMenuClick}
         >
-          <FaComments size={20} />
+          {listType === "chat" ? (
+            <HiChatAlt2 size={20} />
+          ) : (
+            <HiOutlineChatAlt2 size={20} />
+          )}
+
           <span className="inline">Chat</span>
         </button>
         <button
@@ -68,7 +74,12 @@ export default function Sidebar({
           }`}
           onClick={onContactMenuClick}
         >
-          <FaUserFriends size={20} />
+          {listType === "contact" ? (
+            <HiUserGroup size={20} />
+          ) : (
+            <HiOutlineUserGroup size={20} />
+          )}
+
           <span className="inline">Kontak</span>
         </button>
       </nav>
