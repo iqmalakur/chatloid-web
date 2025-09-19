@@ -5,12 +5,15 @@ import Sidebar from "./components/Sidebar";
 import { useAuth } from "@/context/AuthContext";
 import { SocketProvider } from "@/context/SocketContext";
 import MainContent from "./components/MainContent";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 export default function Home() {
   const { user } = useAuth();
 
   const [listType, setListType] = useState<"chat" | "contact">("chat");
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
+
+  const { isMobile } = useIsMobile();
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-gray-50">
@@ -19,12 +22,13 @@ export default function Home() {
         name={user?.name}
         listType={listType}
         onChatMenuClick={() => {
-          setListType((listType) => {
-            if (listType !== "contact") setSelectedRoom(null);
-            return "chat";
-          });
+          setListType("chat");
+          if (isMobile) setSelectedRoom(null);
         }}
-        onContactMenuClick={() => setListType("contact")}
+        onContactMenuClick={() => {
+          setListType("contact");
+          if (isMobile) setSelectedRoom(null);
+        }}
       />
 
       <SocketProvider>
