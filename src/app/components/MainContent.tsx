@@ -34,20 +34,15 @@ export default function MainContent({
         className={`h-full w-full md:w-2/3 lg:w-3/4 ${selectedRoom === null ? "hidden md:flex" : "flex"} flex-col`}
       >
         {selectedRoom ? (
-          <ChatRoom chat={chat} messages={messages} />
+          <ChatRoom
+            chat={chat}
+            messages={messages}
+            onBack={() => onSelectedRoom(null)}
+          />
         ) : (
           <div className="flex flex-1 items-center justify-center text-gray-400">
             Pilih chat untuk memulai
           </div>
-        )}
-
-        {selectedRoom !== null && (
-          <button
-            className="border-t p-3 text-blue-500 md:hidden"
-            onClick={() => onSelectedRoom(null)}
-          >
-            ← Kembali
-          </button>
         )}
       </div>
     </main>

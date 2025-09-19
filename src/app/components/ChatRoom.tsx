@@ -8,13 +8,15 @@ import useUserStatus from "@/hooks/useUserStatus";
 import { useEffect, useRef, useState } from "react";
 import { FiSend } from "react-icons/fi";
 import { formatDateSeparator, formatTime } from "@/helper/date";
+import { HiArrowLeft } from "react-icons/hi";
 
 interface ChatRoomProps {
   chat: Chat | null;
   messages: Message[];
+  onBack: () => void;
 }
 
-export default function ChatRoom({ chat, messages }: ChatRoomProps) {
+export default function ChatRoom({ chat, messages, onBack }: ChatRoomProps) {
   const { user } = useAuth();
   const { socket } = useSocket();
 
@@ -50,6 +52,13 @@ export default function ChatRoom({ chat, messages }: ChatRoomProps) {
   return (
     <div className="flex h-full w-full flex-col">
       <div className="flex items-center gap-3 border-b border-gray-200 p-3">
+        <button
+          className="text-xl text-black hover:text-gray-600 md:hidden"
+          onClick={() => onBack()}
+        >
+          <HiArrowLeft />
+        </button>
+
         <img
           src={chat?.picture}
           alt={chat?.displayName}
