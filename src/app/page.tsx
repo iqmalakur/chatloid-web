@@ -17,6 +17,7 @@ export default function Home() {
       <Sidebar
         picture={user?.picture}
         name={user?.name}
+        listType={listType}
         onChatMenuClick={() => {
           setListType((listType) => {
             if (listType !== "contact") setSelectedRoom(null);

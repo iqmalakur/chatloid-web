@@ -1,7 +1,6 @@
 import { BASE_URL } from "@/config";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import {
   FaComments,
   FaUserFriends,
@@ -13,6 +12,7 @@ import Swal from "sweetalert2";
 interface SidebarProps {
   picture: string | undefined;
   name: string | undefined;
+  listType: "chat" | "contact";
   onChatMenuClick: () => void;
   onContactMenuClick: () => void;
 }
@@ -20,6 +20,7 @@ interface SidebarProps {
 export default function Sidebar({
   picture,
   name,
+  listType,
   onChatMenuClick,
   onContactMenuClick,
 }: SidebarProps) {
@@ -53,14 +54,18 @@ export default function Sidebar({
 
       <nav className="flex w-full flex-col gap-4">
         <button
-          className="flex flex-col items-center rounded-md p-2 hover:bg-gray-100"
+          className={`flex flex-col items-center rounded-md p-2 hover:bg-gray-100 ${
+            listType === "chat" ? "font-semibold" : ""
+          }`}
           onClick={onChatMenuClick}
         >
           <FaComments size={20} />
           <span className="inline">Chat</span>
         </button>
         <button
-          className="flex flex-col items-center rounded-md p-2 hover:bg-gray-100"
+          className={`flex flex-col items-center rounded-md p-2 hover:bg-gray-100 ${
+            listType === "contact" ? "font-semibold" : ""
+          }`}
           onClick={onContactMenuClick}
         >
           <FaUserFriends size={20} />
