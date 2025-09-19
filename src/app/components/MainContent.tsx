@@ -1,17 +1,20 @@
 import useChatList from "@/hooks/useChatList";
 import useChatRoom from "@/hooks/useChatRoom";
-import { useState } from "react";
 import ChatList from "./ChatList";
 import ContactList from "./ContactList";
 import ChatRoom from "./ChatRoom";
 
 interface MainContentProps {
   listType: "chat" | "contact";
+  selectedRoom: string | null;
+  onSelectedRoom: (id: string | null) => void;
 }
 
-export default function MainContent({ listType }: MainContentProps) {
-  const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
-
+export default function MainContent({
+  listType,
+  selectedRoom,
+  onSelectedRoom,
+}: MainContentProps) {
   const { rooms, onMessageUpdate } = useChatList();
   const { chat, messages } = useChatRoom(selectedRoom, onMessageUpdate);
 
@@ -21,7 +24,7 @@ export default function MainContent({ listType }: MainContentProps) {
         className={`h-full w-full border-r border-gray-200 md:w-1/3 lg:w-1/4 ${selectedRoom !== null ? "hidden md:flex" : "flex"} flex-col`}
       >
         {listType === "chat" ? (
-          <ChatList rooms={rooms} onSelectRoom={(id) => setSelectedRoom(id)} />
+          <ChatList rooms={rooms} onSelectRoom={onSelectedRoom} />
         ) : (
           <ContactList />
         )}
@@ -41,7 +44,7 @@ export default function MainContent({ listType }: MainContentProps) {
         {selectedRoom !== null && (
           <button
             className="border-t p-3 text-blue-500 md:hidden"
-            onClick={() => setSelectedRoom(null)}
+            onClick={() => onSelectedRoom(null)}
           >
             ← Kembali
           </button>
