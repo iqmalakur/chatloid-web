@@ -45,7 +45,12 @@ export default function Sidebar({
 
   return (
     <aside className="flex w-20 flex-col items-center border-r bg-white px-1 py-4 shadow-sm">
-      <div className="mb-6 flex flex-col items-center text-sm">
+      <div
+        className="mb-6 flex cursor-pointer flex-col items-center text-sm"
+        onClick={() => {
+          router.push(`${BASE_URL}/profile`);
+        }}
+      >
         {picture && name ? (
           <img src={picture} alt={name} className="w-12 rounded-full" />
         ) : (
