@@ -1,16 +1,17 @@
-"use client";
-
-import { API_URL, BASE_URL } from "@/config";
+import { API_URL } from "@/config";
 import { useAuth } from "@/context/AuthContext";
 import { User } from "@/entities/User";
 import axios from "axios";
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
-import { HiArrowLeft } from "react-icons/hi";
+import { useEffect, useRef, useState } from "react";
+import { HiX } from "react-icons/hi";
 import Swal from "sweetalert2";
 
-export default function ProfilePage() {
-  const router = useRouter();
+interface UserProfileProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function UserProfile({ isOpen, onClose }: UserProfileProps) {
   const { token, user: authUser } = useAuth();
 
   const [user, setUser] = useState(authUser);
@@ -21,6 +22,7 @@ export default function ProfilePage() {
     picture: "",
     pictureFile: null as File | null,
   });
+  const containerRef = useRef(null);
 
   useEffect(() => {
     if (authUser) {
@@ -117,20 +119,27 @@ export default function ProfilePage() {
     });
   };
 
-  return (
-    <div className="relative flex min-h-screen items-center justify-center bg-gray-50 p-4">
-      <button
-        onClick={() => router.push(`${BASE_URL}`)}
-        className="absolute top-4 left-4 flex cursor-pointer items-center gap-1 text-gray-600 hover:text-gray-900"
-      >
-        <HiArrowLeft size={20} />
-        <span className="text-sm">Back</span>
-      </button>
+  if (!isOpen) return null;
 
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(0,0,0,.8)]"
+      ref={containerRef}
+      onClick={(evt) => {
+        if (evt.target == containerRef.current) onClose();
+      }}
+    >
       {!user ? (
-        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-blue-500"></div>
+        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-white"></div>
       ) : (
-        <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-md">
+        <div className="relative w-full max-w-sm rounded-2xl bg-white p-6 shadow-lg">
+          <button
+            onClick={onClose}
+            className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
+          >
+            <HiX size={22} />
+          </button>
+
           <div className="flex justify-center">
             <img
               src={isEditing ? formData.picture : user.picture}
@@ -159,21 +168,27 @@ export default function ProfilePage() {
                   </label>
                 </div>
 
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="w-full rounded-md border p-2 text-sm"
-                />
+                <label className="mb-2 block text-left text-sm font-medium text-gray-700">
+                  Name
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="my-2 w-full rounded-md border p-2 text-sm"
+                  />
+                </label>
 
-                <input
-                  type="text"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleChange}
-                  className="w-full rounded-md border p-2 text-sm"
-                />
+                <label className="mb-2 block text-left text-sm font-medium text-gray-700">
+                  Username
+                  <input
+                    type="text"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                    className="my-2 w-full rounded-md border p-2 text-sm"
+                  />
+                </label>
 
                 <p className="text-sm text-gray-500">{user.email}</p>
 

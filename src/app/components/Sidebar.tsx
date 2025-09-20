@@ -1,6 +1,7 @@
 import { BASE_URL } from "@/config";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { FaSignOutAlt, FaUserCircle } from "react-icons/fa";
 import {
   HiChatAlt2,
@@ -9,6 +10,7 @@ import {
   HiUserGroup,
 } from "react-icons/hi";
 import Swal from "sweetalert2";
+import UserProfile from "./UserProfile";
 
 interface SidebarProps {
   picture: string | undefined;
@@ -26,6 +28,8 @@ export default function Sidebar({
   onContactMenuClick,
 }: SidebarProps) {
   const router = useRouter();
+
+  const [showProfile, setShowProfile] = useState(false);
 
   const handleLogout = () => {
     axios
@@ -47,9 +51,7 @@ export default function Sidebar({
     <aside className="flex w-20 flex-col items-center border-r bg-white px-1 py-4 shadow-sm">
       <div
         className="mb-6 flex cursor-pointer flex-col items-center text-sm"
-        onClick={() => {
-          router.push(`${BASE_URL}/profile`);
-        }}
+        onClick={() => setShowProfile(true)}
       >
         {picture && name ? (
           <img src={picture} alt={name} className="w-12 rounded-full" />
@@ -98,6 +100,8 @@ export default function Sidebar({
         <FaSignOutAlt size={20} />
         <span className="block">Logout</span>
       </button>
+
+      <UserProfile isOpen={showProfile} onClose={() => setShowProfile(false)} />
     </aside>
   );
 }
