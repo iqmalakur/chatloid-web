@@ -3,9 +3,10 @@ import useChatRoom from "@/hooks/useChatRoom";
 import ChatList from "./ChatList";
 import ContactList from "./ContactList";
 import ChatRoom from "./ChatRoom";
+import { ListType } from "@/types/ListType";
 
 interface MainContentProps {
-  listType: "chat" | "contact";
+  listType: ListType;
   selectedRoom: string | null;
   onSelectedRoom: (id: string | null) => void;
   onRoomCreated: (id: string) => void;

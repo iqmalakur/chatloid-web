@@ -6,11 +6,12 @@ import { useAuth } from "@/context/AuthContext";
 import { SocketProvider } from "@/context/SocketContext";
 import MainContent from "./components/MainContent";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { ListType } from "@/types/ListType";
 
 export default function Home() {
   const { user } = useAuth();
 
-  const [listType, setListType] = useState<"chat" | "contact">("chat");
+  const [listType, setListType] = useState<ListType>("chat");
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
 
   const { isMobile } = useIsMobile();
@@ -27,6 +28,10 @@ export default function Home() {
         }}
         onContactMenuClick={() => {
           setListType("contact");
+          if (isMobile) setSelectedRoom(null);
+        }}
+        onNotificationMenuClick={() => {
+          setListType("notification");
           if (isMobile) setSelectedRoom(null);
         }}
       />
