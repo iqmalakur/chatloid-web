@@ -104,7 +104,7 @@ export default function ChatRoom({ chat, messages, onBack }: ChatRoomProps) {
       <div className="flex items-center gap-2 border-t border-gray-200 p-3">
         <input
           type="text"
-          placeholder="Tulis pesan..."
+          placeholder="Write a message..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           className="flex-1 rounded-full border px-3 py-2 outline-none"

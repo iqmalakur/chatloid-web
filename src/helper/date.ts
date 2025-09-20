@@ -15,7 +15,7 @@ export const formatChatListDate = (date?: Date): string => {
       minute: "2-digit",
     });
   } else if (target.getTime() === yesterday.getTime()) {
-    return "Kemarin";
+    return "Yesterday";
   } else {
     return date.toLocaleDateString("id-ID", {
       day: "2-digit",
@@ -38,9 +38,9 @@ export const formatDateSeparator = (date: Date) => {
   yesterday.setDate(today.getDate() - 1);
 
   if (date.toDateString() === today.toDateString()) {
-    return "Hari ini";
+    return "Today";
   } else if (date.toDateString() === yesterday.toDateString()) {
-    return "Kemarin";
+    return "Yesterday";
   } else {
     return date.toLocaleDateString("id-ID");
   }

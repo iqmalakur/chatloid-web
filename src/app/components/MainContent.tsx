@@ -49,7 +49,7 @@ export default function MainContent({
           />
         ) : (
           <div className="flex flex-1 items-center justify-center text-gray-400">
-            Pilih chat untuk memulai
+            Select chat to begin
           </div>
         )}
       </div>
