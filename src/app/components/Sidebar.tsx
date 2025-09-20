@@ -1,7 +1,7 @@
 import { BASE_URL } from "@/config";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { FaBars, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
 import {
   HiBell,
@@ -56,6 +56,10 @@ export default function Sidebar({
 
   return (
     <div className="relative w-12">
+      <div
+        className={`absolute top-0 bottom-0 left-0 z-40 ${isExpanded ? "w-screen" : "w-0"}`}
+        onClick={() => setIsExpanded(false)}
+      ></div>
       <div
         className={`absolute top-0 bottom-0 left-0 z-50 overflow-x-hidden border-r bg-white shadow-sm transition-all duration-100 ${isExpanded ? "w-40" : "w-12"}`}
       >
