@@ -39,19 +39,37 @@ export default function Sidebar({
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handleLogout = () => {
-    axios
-      .post(`${BASE_URL}/api/auth/logout`)
-      .then(() => {
-        router.push(`${BASE_URL}/login`);
-      })
-      .catch(() => {
-        Swal.fire({
-          title: "Logout Gagal",
-          text: "Terjadi kesalahan saat mencoba logout. Silakan coba lagi.",
-          icon: "error",
-          confirmButtonText: "OK",
-        });
-      });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out from this account.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, Logout",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .post(`${BASE_URL}/api/auth/logout`)
+          .then(() => {
+            Swal.fire(
+              "Logged Out!",
+              "You have been successfully logged out.",
+              "success",
+            );
+            router.push(`${BASE_URL}/login`);
+          })
+          .catch(() => {
+            Swal.fire({
+              title: "Logout Failed",
+              text: "An error occurred while trying to log out. Please try again.",
+              icon: "error",
+              confirmButtonText: "OK",
+            });
+          });
+      }
+    });
   };
 
   return (
