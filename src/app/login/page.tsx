@@ -2,7 +2,7 @@
 
 import { API_URL, BASE_URL } from "@/config";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import Swal from "sweetalert2";
 
@@ -10,11 +10,13 @@ export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
+  const [isSended, setIsSended] = useState(false);
 
   const handleGoogleLogin = () => {
     router.push(
       `${API_URL}/auth/google?redirect_to=${BASE_URL}/api/auth/result`,
     );
+    setIsSended(true);
   };
 
   useEffect(() => {
@@ -46,10 +48,20 @@ export default function LoginPage() {
 
         <button
           onClick={handleGoogleLogin}
-          className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-md border border-gray-300 bg-white py-2 font-medium text-gray-600 shadow-sm transition hover:bg-gray-100"
+          className={`flex w-full items-center justify-center gap-3 rounded-md border border-gray-300 bg-white py-2 font-medium text-gray-600 shadow-sm transition hover:bg-gray-100 ${isSended ? "cursor-not-allowed" : "cursor-pointer"}`}
+          disabled={isSended}
         >
-          <FcGoogle size={22} />
-          Login dengan Google
+          {isSended ? (
+            <div className="flex items-center gap-2">
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-400 border-t-transparent"></div>
+              <span>Logging in...</span>
+            </div>
+          ) : (
+            <>
+              <FcGoogle size={22} />
+              Login dengan Google
+            </>
+          )}
         </button>
 
         <p className="mt-4 text-center text-xs text-gray-400">
