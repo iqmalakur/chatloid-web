@@ -4,6 +4,7 @@ import ChatList from "./ChatList";
 import ContactList from "./ContactList";
 import ChatRoom from "./ChatRoom";
 import { ListType } from "@/types/ListType";
+import { ContactRequestList } from "./ContactRequestList";
 
 interface MainContentProps {
   listType: ListType;
@@ -26,9 +27,10 @@ export default function MainContent({
       <div
         className={`h-full w-full border-r border-gray-200 md:w-1/3 lg:w-1/4 ${selectedRoom !== null ? "hidden md:flex" : "flex"} flex-col`}
       >
-        {listType === "chat" ? (
+        {listType === "chat" && (
           <ChatList rooms={rooms} onSelectRoom={onSelectedRoom} />
-        ) : (
+        )}
+        {listType === "contact" && (
           <ContactList
             onCreateRoom={(room) => {
               onUpdateRoom(room);
@@ -36,6 +38,7 @@ export default function MainContent({
             }}
           />
         )}
+        {listType === "notification" && <ContactRequestList />}
       </div>
 
       <div

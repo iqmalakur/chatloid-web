@@ -1,5 +1,5 @@
 import { Room } from "@/entities/Room";
-import { formatChatListDate } from "@/helper/date";
+import { formatSimpleDate } from "@/helper/date";
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 
@@ -40,7 +40,7 @@ export default function ChatList({ rooms, onSelectRoom }: ChatListProps) {
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold">{room.displayName}</h3>
                 <span className="text-xs text-gray-400">
-                  {formatChatListDate(room.lastMessage?.createdAt)}
+                  {formatSimpleDate(room.lastMessage?.createdAt)}
                 </span>
               </div>
               <p className="truncate text-sm text-gray-500">

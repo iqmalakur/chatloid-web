@@ -1,4 +1,4 @@
-export const formatChatListDate = (date?: Date): string => {
+export const formatSimpleDate = (date?: Date): string => {
   if (!date) return "";
 
   const now = new Date();
