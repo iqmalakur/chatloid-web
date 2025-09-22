@@ -38,7 +38,7 @@ export default function useContactRequests() {
     };
 
     fetch();
-  }, [update]);
+  }, [update, token]);
 
   return { contactRequests, refresh };
 }

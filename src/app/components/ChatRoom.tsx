@@ -7,7 +7,7 @@ import { useSocket } from "@/context/SocketContext";
 import useUserStatus from "@/hooks/useUserStatus";
 import { useEffect, useRef, useState } from "react";
 import { FiSend } from "react-icons/fi";
-import { formatDateSeparator, formatTime } from "@/helper/date";
+import { formatDateSeparator } from "@/helper/date";
 import { HiArrowLeft } from "react-icons/hi";
 import MessageItem from "./MessageItem";
 

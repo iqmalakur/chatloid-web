@@ -45,7 +45,7 @@ export default function useChatRoom(
     };
 
     fetch();
-  }, [id]);
+  }, [id, token]);
 
   useEffect(() => {
     if (!socket) return;
@@ -92,7 +92,7 @@ export default function useChatRoom(
     return () => {
       socket.off("new_message");
     };
-  }, [socket, messages]);
+  }, [socket, messages, id, updateRooms]);
 
   return { chat, messages };
 }

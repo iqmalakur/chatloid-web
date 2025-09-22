@@ -32,7 +32,7 @@ export function SocketProvider({ children }: PropsWithChildren) {
       socketInstance.off("error");
       socketInstance.disconnect();
     };
-  }, []);
+  }, [token]);
 
   return (
     <SocketContext.Provider value={{ socket }}>

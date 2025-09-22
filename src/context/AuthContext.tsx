@@ -23,17 +23,11 @@ const AuthContext = createContext<AuthContextType>({
 export function AuthProvider({ token, children }: AuthProviderProps) {
   const pathname = usePathname();
   const router = useRouter();
-
-  if (!token) {
-    if (!pathname.startsWith("/login")) {
-      router.push(`${BASE_URL}/login`);
-    }
-    return children;
-  }
-
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
+    if (!token) return;
+
     const fetch = async () => {
       const result = await axios.get<User>(`${API_URL}/users/me`, {
         headers: { Authorization: `bearer ${token}` },
@@ -42,7 +36,14 @@ export function AuthProvider({ token, children }: AuthProviderProps) {
     };
 
     fetch();
-  }, []);
+  }, [token]);
+
+  if (!token) {
+    if (!pathname.startsWith("/login")) {
+      router.push(`${BASE_URL}/login`);
+    }
+    return children;
+  }
 
   return (
     <AuthContext.Provider value={{ token, user }}>

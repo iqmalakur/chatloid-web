@@ -1,7 +1,7 @@
 import { BASE_URL } from "@/config";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { FaBars, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
 import {
   HiBell,

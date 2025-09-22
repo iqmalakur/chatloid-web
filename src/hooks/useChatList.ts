@@ -47,7 +47,7 @@ export default function useChatList() {
 
       fetch();
     }
-  }, [isUpdate]);
+  }, [token, isUpdate]);
 
   return { rooms, fetchRooms };
 }

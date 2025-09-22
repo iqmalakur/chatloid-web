@@ -30,7 +30,7 @@ export default function LoginPage() {
         router.push(`${BASE_URL}/login`);
       });
     }
-  }, []);
+  }, [error, router]);
 
   return (
     <div className="flex h-screen w-full items-center justify-center bg-[#f0ebeb]">

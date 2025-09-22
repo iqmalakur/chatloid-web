@@ -24,7 +24,7 @@ export default function useContactList() {
     };
 
     fetch();
-  }, []);
+  }, [token]);
 
   return { contacts };
 }
