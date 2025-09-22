@@ -23,7 +23,7 @@ export default function MainContent({
   const { chat, messages } = useChatRoom(selectedRoom, onMessageUpdate);
 
   return (
-    <main className="flex h-screen flex-1">
+    <main className="flex h-screen min-w-0 flex-1">
       <div
         className={`h-full w-full border-r border-gray-200 md:w-1/3 lg:w-1/4 ${selectedRoom !== null ? "hidden md:flex" : "flex"} flex-col`}
       >

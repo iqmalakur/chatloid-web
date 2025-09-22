@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { FiSend } from "react-icons/fi";
 import { formatDateSeparator, formatTime } from "@/helper/date";
 import { HiArrowLeft } from "react-icons/hi";
+import MessageItem from "./MessageItem";
 
 interface ChatRoomProps {
   chat: Chat | null;
@@ -78,24 +79,7 @@ export default function ChatRoom({ chat, messages, onBack }: ChatRoomProps) {
                 {formatDateSeparator(msg.createdAt)}
               </div>
             )}
-            <div
-              className={`flex ${
-                msg.sender === user?.id ? "justify-end" : "justify-start"
-              }`}
-            >
-              <div
-                className={`max-w-xs rounded-2xl px-3 py-2 text-sm shadow ${
-                  msg.sender === user?.id
-                    ? "rounded-br-none bg-blue-500 text-white"
-                    : "rounded-bl-none bg-white text-gray-800"
-                }`}
-              >
-                <p>{msg.content}</p>
-                <span className="mt-1 block text-right text-xs text-gray-300">
-                  {formatTime(msg.createdAt)}
-                </span>
-              </div>
-            </div>
+            <MessageItem message={msg} userId={user?.id} />
           </div>
         ))}
         <div ref={bottomRef}></div>

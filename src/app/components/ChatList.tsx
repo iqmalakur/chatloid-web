@@ -36,9 +36,11 @@ export default function ChatList({ rooms, onSelectRoom }: ChatListProps) {
               alt={room.displayName}
               className="mr-3 h-12 w-12 rounded-full object-cover"
             />
-            <div className="flex-1">
+            <div className="min-w-0 flex-1">
               <div className="flex items-center justify-between">
-                <h3 className="font-semibold">{room.displayName}</h3>
+                <h3 className="max-w-[70%] truncate font-semibold">
+                  {room.displayName}
+                </h3>
                 <span className="text-xs text-gray-400">
                   {formatSimpleDate(room.lastMessage?.createdAt)}
                 </span>
