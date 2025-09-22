@@ -54,7 +54,7 @@ export default function ChatRoom({ chat, messages, onBack }: ChatRoomProps) {
     <div className="flex h-full w-full flex-col">
       <div className="flex items-center gap-3 border-b border-gray-200 p-3">
         <button
-          className="text-xl text-black hover:text-gray-600 md:hidden"
+          className="cursor-pointer text-xl text-black hover:text-gray-600 md:hidden"
           onClick={() => onBack()}
         >
           <HiArrowLeft />
