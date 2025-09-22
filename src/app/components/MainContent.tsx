@@ -19,8 +19,8 @@ export default function MainContent({
   onSelectedRoom,
   onRoomCreated,
 }: MainContentProps) {
-  const { rooms, onMessageUpdate, onUpdateRoom } = useChatList();
-  const { chat, messages } = useChatRoom(selectedRoom, onMessageUpdate);
+  const { rooms, fetchRooms } = useChatList();
+  const { chat, messages } = useChatRoom(selectedRoom, fetchRooms);
 
   return (
     <main className="flex h-screen min-w-0 flex-1">
@@ -33,7 +33,7 @@ export default function MainContent({
         {listType === "contact" && (
           <ContactList
             onCreateRoom={(room) => {
-              onUpdateRoom(room);
+              fetchRooms();
               onRoomCreated(room.id);
             }}
           />

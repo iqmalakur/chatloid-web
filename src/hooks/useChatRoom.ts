@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 
 export default function useChatRoom(
   id: string | null,
-  onMessageUpdate: (message: NewMessage) => void,
+  updateRooms: () => void,
 ) {
   const { token } = useAuth();
   const { socket } = useSocket();
@@ -51,7 +51,33 @@ export default function useChatRoom(
     if (!socket) return;
 
     socket.on("new_message", (message: NewMessage) => {
+      updateRooms();
+
       if (message.chatRoomId === id) {
+        if (message.isEdited) {
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === message.id
+                ? {
+                    ...msg,
+                    content: message.content,
+                    createdAt: new Date(message.timestamp),
+                    isEdited: true,
+                  }
+                : msg,
+            ),
+          );
+          return;
+        }
+
+        if (message.isDeleted) {
+          setMessages((prev) => {
+            return prev.filter((msg) => msg.id !== message.id);
+          });
+
+          return;
+        }
+
         const newMessage: Message = {
           id: message.id,
           sender: message.senderId,
@@ -61,8 +87,6 @@ export default function useChatRoom(
         };
         setMessages([...messages, newMessage]);
       }
-
-      onMessageUpdate(message);
     });
 
     return () => {

@@ -1,6 +1,5 @@
 import { API_URL } from "@/config";
 import { useAuth } from "@/context/AuthContext";
-import { NewMessage } from "@/entities/NewMessage";
 import { Room } from "@/entities/Room";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
@@ -15,44 +14,7 @@ export default function useChatList() {
     userRef.current = user;
   }, [user]);
 
-  const onUpdateRoom = (room: Room) => {
-    setRooms((rooms) => {
-      if (!rooms.find((r) => r.id === room.id)) {
-        return [...rooms, room];
-      }
-      return rooms;
-    });
-  };
-
-  const onMessageUpdate = (message: NewMessage) => {
-    setRooms((rooms) => {
-      const roomsMap = new Map(rooms.map((room) => [room.id, room]));
-      const room = roomsMap.get(message.chatRoomId);
-
-      if (room) {
-        roomsMap.set(room.id, {
-          ...room,
-          lastMessage: {
-            content: message.content,
-            createdAt: new Date(message.timestamp),
-          },
-        });
-      } else {
-        if (
-          userRef.current != null &&
-          message.receiverId === userRef.current.id
-        ) {
-          setIsUpdate(true);
-        }
-      }
-
-      return Array.from(roomsMap.values()).sort(
-        (a, b) =>
-          (b.lastMessage?.createdAt.getTime() ?? 0) -
-          (a.lastMessage?.createdAt.getTime() ?? 0),
-      );
-    });
-  };
+  const fetchRooms = () => setIsUpdate(true);
 
   useEffect(() => {
     if (isUpdate) {
@@ -87,5 +49,5 @@ export default function useChatList() {
     }
   }, [isUpdate]);
 
-  return { rooms, onMessageUpdate, onUpdateRoom };
+  return { rooms, fetchRooms };
 }
