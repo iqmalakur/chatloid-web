@@ -87,7 +87,7 @@ export default function Sidebar({
             onClick={() => setShowProfile(true)}
           >
             {picture && name ? (
-              <img src={picture} alt={name} className="w-8 rounded-full" />
+              <img src={picture} alt={name} className="h-8 w-8 rounded-full" />
             ) : (
               <FaUserCircle size={32} className="text-gray-500" />
             )}
